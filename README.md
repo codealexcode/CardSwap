@@ -1,8 +1,9 @@
 # EVENT DRIVEN ASYNC PROGRAMMING - PROJET
 
-## EQUIPE: 
-* Gaëtan LE MEUR
+## EQUIPE:
 * Alexis MOULIN
+* Gaëtan LE MEUR
+
 
 ## SUJET:
 Création d'une platforme de mise en relation de joueurs de MTG et YUGIOH
@@ -23,9 +24,6 @@ rendre plus facile l'échange/la vente.
 	- chat potentiel
 	- service de vente potentiel
 
-
-## CONCEPTION:
-
 ## PLANNING:
 * Définir le model de donnée.
 * Recherche de cartes via les APIs.
@@ -33,6 +31,7 @@ rendre plus facile l'échange/la vente.
 * Recherche de carte dans l'application.
 * Contact entre utilisateurs.
 
+## CONCEPTION:
 ## PROTOTYPE:
 
 
