@@ -27,11 +27,11 @@ Il faut donc pouvoir gérer:
 CONCEPTION:
 
 PLANNING:
-1 - définir le model de donnée
-2 - recherche de cartes via les APIs
-3 - ajout de cartes dans la "vitrine"
-4 - recherche de carte dans l'application
-5 - contact entre utilisateurs
+1 - définir le model de donnée.
+2 - recherche de cartes via les APIs.
+3 - ajout de cartes dans la "vitrine".
+4 - recherche de carte dans l'application.
+5 - contact entre utilisateurs.
 
 PROTOTYPE:
 
