@@ -8,7 +8,7 @@
 ## SUJET:
 Création d'une platforme de mise en relation de joueurs de MTG et YUGIOH
 afin de permettre l'achat/l'échange de carte, le tout géolocalisé afin de
-rendre plus facile l'échange/la vente.
+rendre plus facile la vente/l'échange.
 
 ## Il faut donc pouvoir gérer:
 - les utilisateurs:
