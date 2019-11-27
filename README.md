@@ -1,15 +1,15 @@
-EVENT DRIVEN ASYNC PROGRAMMING - PROJET
+# EVENT DRIVEN ASYNC PROGRAMMING - PROJET
 
-EQUIPE: 
-Gaëtan LE MEUR
-Alexis MOULIN
+## EQUIPE: 
+* Gaëtan LE MEUR
+* Alexis MOULIN
 
-SUJET:
+## SUJET:
 Création d'une platforme de mise en relation de joueurs de MTG et YUGIOH
 afin de permettre l'achat/l'échange de carte, le tout géolocalisé afin de
 rendre plus facile l'échange/la vente.
 
-Il faut donc pouvoir gérer:
+## Il faut donc pouvoir gérer:
 - les utilisateurs:
 	- authentification
 	- géolocalisation
@@ -24,16 +24,16 @@ Il faut donc pouvoir gérer:
 	- service de vente potentiel
 
 
-CONCEPTION:
+## CONCEPTION:
 
-PLANNING:
-1 - définir le model de donnée.
-2 - recherche de cartes via les APIs.
-3 - ajout de cartes dans la "vitrine".
-4 - recherche de carte dans l'application.
-5 - contact entre utilisateurs.
+## PLANNING:
+* Définir le model de donnée.
+* Recherche de cartes via les APIs.
+* Ajout de cartes dans la "vitrine".
+* Recherche de carte dans l'application.
+* Contact entre utilisateurs.
 
-PROTOTYPE:
+## PROTOTYPE:
 
 
 
