@@ -4,18 +4,28 @@
  <% include partials/head %> 
 </head>
 <body>
-<% include partials/menu %>
-  <div class="container-fluid bg-3 text-center">    
-      <h3><%= page %></h3><br>
+<% include partials/menu %>   
+  <h3><%= page %></h3><br>
 
-    <form action='/api/findCard' method='POST'>
-        <input type="text" name="cardName" placeholder="Card Name">
-        <button type="submit">Find the Card</button>
-    </form>
+  <form action='/api/findCard' method='POST'>
+    <div class="form-group">
+        <label>Enter Card Name</label>
+        <input type="text" id="cardNameId" name="cardName" placeholder="Card Name">
+    </div>
 
-    <img src="<%= imageUrl %>">
-    
-  </div>
+    <div class="form-group form-check">
+        <label class="form-check-label" >MTG</label>
+        <input type="checkbox" name="optionMTG" value="MTG">
+    </div>
+
+    <div class="form-group form-check">
+        <label class="form-check-label" >YUGIOH</label>
+        <input type="checkbox" name="optionYUGIOH" value="YUGIOH">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+
+  <img src="<%= imageUrl %>">
 </body>
 <% include partials/script %>
 </html>
