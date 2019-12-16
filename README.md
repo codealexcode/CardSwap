@@ -3,7 +3,7 @@
 ## EQUIPE:
 * Alexis MOULIN
 * Gaëtan LE MEUR
-
+* Fares EL KHOULY
 
 ## SUJET:
 Création d'une platforme de mise en relation de joueurs de MTG et YUGIOH
