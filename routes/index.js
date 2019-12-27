@@ -9,6 +9,7 @@ var router = express.Router();
 
 const connect = mysql.createConnection({
   host: "localhost",
+  port: "3308",
   user: "root",
   password: "",
   database: "cardswap"
@@ -35,9 +36,9 @@ router.post('/api/login/', function(req, res) {
     connect.query('SELECT * FROM user', function(err, result) {
       if(err) console.log(err)
       if(result[0].name === username && result[0].password === password){
-        res.render('findcardView', {page:'Find a Card', 
-                                    menuId:'findCard',
-                                    imageUrl: ''});
+        res.render('homepage', {page:'Homepage', 
+                                menuId:'homepage',  
+                                username: username});
       }
     });
   });
@@ -49,12 +50,19 @@ router.post('/api/findCard/', function(req, res) {
   const optionYUGIOH = req.body.optionYUGIOH
   var cardFound;
   var cardFoundImageUrl;
+  var cardFoundId;
+  var cardFoundName;
+  var cardFoundGame;
 
   if(optionMTG){
     mtg.card.where({ name: cardName})
     .then(cards => {
       cardFound = cards[0]
       cardFoundImageUrl = cardFound.imageUrl
+      cardFoundName = cardFound.name
+      cardFoundId = cardFound.id
+      cardFoundGame = "MTG"
+      insertCard(cardFoundName, cardFoundId, cardFoundImageUrl, cardFoundGame);
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
                                   imageUrl: cardFoundImageUrl});
@@ -62,22 +70,33 @@ router.post('/api/findCard/', function(req, res) {
   } else if(optionYUGIOH){
     const request = 'https://db.ygoprodeck.com/api/v5/cardinfo.php?name=' + cardName
     Request.get(request, (error, response, body) => {
-      if(error) {
-        return console.log(error);
-      }
+      if(error) return console.log(error);
       const cardsFound = JSON.parse(body);
       cardFound = cardsFound[0];
-      cardFoundImageUrl = cardFound["card_images"][0].image_url;
+      cardFoundName = cardFound.name
+      cardFoundId = cardFound.id
+      cardFoundImageUrl = cardFound["card_images"][0].image_url
+      cardFoundGame = "YUGIOH"
+      insertCard(cardFoundName, cardFoundId, cardFoundImageUrl, cardFoundGame);
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
                                   imageUrl: cardFoundImageUrl});
     });
-
-  } else{
-
-  }
-
-  
+  } else{}
 });
+
+function insertCard(name, id, imageUrl,  game){
+  connect.query("SELECT * FROM card WHERE game = " + mysql.escape(game) + 
+                                       "AND id = " + mysql.escape(id), function(err, result) {
+    if(err) console.log(err)
+    if(!result[0]){
+      var sqlQuery = "INSERT INTO card (game, name, card_id,  image_url) VALUES ?";
+      var sqlValues = [[game, name, id, imageUrl]];
+      connect.query(sqlQuery,  [sqlValues], function(err, result) {
+        if (err) throw err;
+      });
+    }
+  });
+}
 
 module.exports = router;
