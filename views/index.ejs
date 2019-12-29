@@ -4,22 +4,36 @@
  <% include partials/head %> 
 </head>
 <body>
-  <h3><%= page %></h3>
-  <br>
 
+  <div class="container">
 
-  <form action='/api/login' method='POST'>
-    <div class="form-group">
-        <label>Enter Username</label>
-        <input type="text" id="username" name="username" placeholder="Username">
+    <div class="col">
+
+      <div class="row">
+        <h3><%= page %></h3>
+        <br>
+      </div>
+
+      <div class="row">
+
+        <form action='/api/login' method='POST'>
+          <div class="form-group">
+              <label>Enter Username</label>
+              <input type="text" id="username" name="username" placeholder="Username">
+          </div>
+          <div class="form-group">
+              <label>Enter Password</label>
+              <input type="text" id="password" name="password" placeholder="Password">
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+
+      </div>
+
     </div>
-    <div class="form-group">
-        <label>Enter Password</label>
-        <input type="text" id="password" name="password" placeholder="Password">
-    </div>
-    <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
-  
+
+  </div>
+
 </body>
 <% include partials/script %>
 </html>

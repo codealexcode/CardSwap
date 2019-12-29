@@ -4,17 +4,28 @@
  <% include partials/head %> 
 </head>
 <body>
-  <h3><%= page %> - you are logged as <%= username %></h3>
-  <br>
 
-  <div>
+  <div class="container">
+
+    <div class="col">
+      
+      <h3><%= page %> - you are logged as <%= username %></h3>
+      <br>
+
       <div>
-        <a href="/findcardView">Find a Card</a>
+          <div>
+            <a href="/findcardView">Find a Card</a>
+          </div>
+          <div> 
+            <a href="/sellcardView">Sell a Card</a>
+          </div>
       </div>
-      <div> 
-        <a href="/sellcardView">Sell a Card</a>
-      </div>
+
+    </div>
+    
   </div>
+
+  
   
 </body>
 <% include partials/script %>

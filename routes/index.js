@@ -6,6 +6,13 @@ var mysql = require('mysql')
 var Request = require("request");
 var router = express.Router();
 
+var sessionUsername
+var sessionUserId
+
+var selectedCardName
+var selectedCardImageUrl
+var selectedCardID
+var selectedCardGame
 
 const connect = mysql.createConnection({
   host: "localhost",
@@ -23,7 +30,8 @@ router.get('/', function(req, res, next) {
 router.get('/findcardView', function(req, res, next) {
   res.render('findcardView', {page:'Find a Card', 
                               menuId:'findCard',
-                              imageUrl: ''});
+                              imageUrl: '',
+                              cardFound: false});
 });
 
 router.post('/api/login/', function(req, res) {
@@ -36,6 +44,8 @@ router.post('/api/login/', function(req, res) {
     connect.query('SELECT * FROM user', function(err, result) {
       if(err) console.log(err)
       if(result[0].name === username && result[0].password === password){
+        sessionUsername = username
+        sessionUserId = result[0].id
         res.render('homepage', {page:'Homepage', 
                                 menuId:'homepage',  
                                 username: username});
@@ -49,23 +59,21 @@ router.post('/api/findCard/', function(req, res) {
   const optionMTG = req.body.optionMTG
   const optionYUGIOH = req.body.optionYUGIOH
   var cardFound;
-  var cardFoundImageUrl;
-  var cardFoundId;
-  var cardFoundName;
-  var cardFoundGame;
 
   if(optionMTG){
     mtg.card.where({ name: cardName})
     .then(cards => {
       cardFound = cards[0]
-      cardFoundImageUrl = cardFound.imageUrl
-      cardFoundName = cardFound.name
-      cardFoundId = cardFound.id
-      cardFoundGame = "MTG"
-      insertCard(cardFoundName, cardFoundId, cardFoundImageUrl, cardFoundGame);
+      selectedCardName = cardFound.name
+      selectedCardId  = cardFound.id
+      selectedCardImageUrl = cardFound.imageUrl
+      selectedCardGame = "MTG"
+      insertCard(selectedCardName, selectedCardId, selectedCardImageUrl, selectedCardGame);
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
-                                  imageUrl: cardFoundImageUrl});
+                                  imageUrl: selectedCardImageUrl,
+                                  cardFound: true});
+      
     });
   } else if(optionYUGIOH){
     const request = 'https://db.ygoprodeck.com/api/v5/cardinfo.php?name=' + cardName
@@ -73,17 +81,35 @@ router.post('/api/findCard/', function(req, res) {
       if(error) return console.log(error);
       const cardsFound = JSON.parse(body);
       cardFound = cardsFound[0];
-      cardFoundName = cardFound.name
-      cardFoundId = cardFound.id
-      cardFoundImageUrl = cardFound["card_images"][0].image_url
-      cardFoundGame = "YUGIOH"
-      insertCard(cardFoundName, cardFoundId, cardFoundImageUrl, cardFoundGame);
+      selectedCardName = cardFound.name
+      selectedCardId  = cardFound.id
+      selectedCardImageUrl = cardFound["card_images"][0].image_url
+      selectedCardGame = "YUGIOH"
+      insertCard(selectedCardName, selectedCardId, selectedCardImageUrl, selectedCardGame);
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
-                                  imageUrl: cardFoundImageUrl});
+                                  imageUrl: selectedCardImageUrl,
+                                  cardFound: true});
     });
   } else{}
 });
+
+router.post('/api/sellCard/', function(req, res) {
+  res.render('sellcardView', {page:'Sell a Card', 
+                              menuId:'sellCard',
+                              imageUrl: selectedCardImageUrl,
+                              cardFound: true});
+});
+
+router.post('/api/addCardToShop', function(req, res) {
+  insertCardUser(selectedCardId, sessionUserId);
+  res.render('sellcardView', {page:'Sell a Card', 
+                              menuId:'sellCard',
+                              imageUrl: selectedCardImageUrl,
+                              cardFound: true});
+});
+
+
 
 function insertCard(name, id, imageUrl,  game){
   connect.query("SELECT * FROM card WHERE game = " + mysql.escape(game) + 
@@ -96,6 +122,14 @@ function insertCard(name, id, imageUrl,  game){
         if (err) throw err;
       });
     }
+  });
+}
+
+function insertCardUser(cardId, userId){
+  var sqlQuery = "INSERT INTO card_user (card_id, user_id) VALUES ?";
+  var sqlValues = [[cardId, userId]];
+  connect.query(sqlQuery,  [sqlValues], function(err, result) {
+    if (err) throw err;
   });
 }
 
