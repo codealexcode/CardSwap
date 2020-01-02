@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3308
--- Généré le :  Dim 29 déc. 2019 à 16:27
+-- Généré le :  jeu. 02 jan. 2020 à 16:56
 -- Version du serveur :  8.0.18
 -- Version de PHP :  7.3.12
 
@@ -25,6 +25,20 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `annonces`
+--
+
+DROP TABLE IF EXISTS `annonces`;
+CREATE TABLE IF NOT EXISTS `annonces` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `card_id` varchar(256) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `card`
 --
 
@@ -33,10 +47,10 @@ CREATE TABLE IF NOT EXISTS `card` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `game` varchar(256) NOT NULL,
   `name` varchar(256) NOT NULL,
-  `card_id` int(11) NOT NULL,
+  `card_id` varchar(256) NOT NULL,
   `image_url` varchar(256) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -47,10 +61,10 @@ CREATE TABLE IF NOT EXISTS `card` (
 DROP TABLE IF EXISTS `card_user`;
 CREATE TABLE IF NOT EXISTS `card_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `card_id` int(11) NOT NULL,
+  `card_id` varchar(256) NOT NULL,
   `user_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
