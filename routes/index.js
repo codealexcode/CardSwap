@@ -11,7 +11,8 @@ var sessionUserId
 
 var selectedCardName
 var selectedCardImageUrl
-var selectedCardID
+var selectedCardId
+var selectedCardDBID
 var selectedCardGame
 
 const connect = mysql.createConnection({
@@ -41,7 +42,7 @@ router.post('/api/login/', function(req, res) {
   connect.connect(function(err){
     if (err) throw err;
     console.log("Connected!");
-    connect.query('SELECT * FROM user', function(err, result) {
+    connect.query('SELECT * FROM user WHERE name = ' +  mysql.escape(username), function(err, result) {
       if(err) console.log(err)
       if(result[0].name === username && result[0].password === password){
         sessionUsername = username
@@ -102,25 +103,27 @@ router.post('/api/sellCard/', function(req, res) {
 });
 
 router.post('/api/addCardToShop', function(req, res) {
-  insertCardUser(selectedCardId, sessionUserId);
+  insertCardUser(selectedCardDBID, sessionUserId);
+  findSellers(selectedCardDBID)
   res.render('sellcardView', {page:'Sell a Card', 
                               menuId:'sellCard',
                               imageUrl: selectedCardImageUrl,
                               cardFound: true});
 });
 
-
-
 function insertCard(name, id, imageUrl,  game){
   connect.query("SELECT * FROM card WHERE game = " + mysql.escape(game) + 
-                                       "AND id = " + mysql.escape(id), function(err, result) {
+                                  "AND card_id = " + mysql.escape(id), function(err, result) {
     if(err) console.log(err)
     if(!result[0]){
       var sqlQuery = "INSERT INTO card (game, name, card_id,  image_url) VALUES ?";
       var sqlValues = [[game, name, id, imageUrl]];
       connect.query(sqlQuery,  [sqlValues], function(err, result) {
         if (err) throw err;
+        selectedCardDBID = result.insertId
       });
+    } else {
+      selectedCardDBID = result[0].id
     }
   });
 }
@@ -132,5 +135,15 @@ function insertCardUser(cardId, userId){
     if (err) throw err;
   });
 }
+
+function findSellers(cardId){
+  connect.query("SELECT user_id FROM card_user WHERE card_id = " + mysql.escape(cardId), function(err, result) {
+    if (err) throw err;
+    console.log("FIND SELLERS")
+    console.log(result)
+  });
+}
+
+
 
 module.exports = router;
