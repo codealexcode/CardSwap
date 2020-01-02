@@ -11,9 +11,19 @@
     <br>
     <img src="<%= imageUrl %>">
 
-    <form action='/api/addCardToShop' method="POST">
-      <button type="submit" class="btn btn-primary">ADD CARD TO SHOP</button>
-    </form>
+    <%if (mode == "SELL") { %>
+      <form action='/api/addCardToShop' method="POST">
+        <button type="submit" class="btn btn-primary">ADD CARD TO SHOP</button>
+      </form>
+    <% } %>
+
+    <%if (mode == "BUY") { %>
+      <form action='/api/addCardToAnnonce' method="POST">
+        <button type="submit" class="btn btn-primary">CREATE ANNONCE</button>
+      </form>
+    <% } %>
+
+    
 
   </div>
 

@@ -99,6 +99,15 @@ router.post('/api/sellCard/', function(req, res) {
   res.render('sellcardView', {page:'Sell a Card', 
                               menuId:'sellCard',
                               imageUrl: selectedCardImageUrl,
+                              mode: "SELL",
+                              cardFound: true});
+});
+
+router.post('/api/buyCard/', function(req, res) {
+  res.render('sellcardView', {page:'Sell a Card', 
+                              menuId:'sellCard',
+                              imageUrl: selectedCardImageUrl,
+                              mode: "BUY",
                               cardFound: true});
 });
 
@@ -108,6 +117,17 @@ router.post('/api/addCardToShop', function(req, res) {
   res.render('sellcardView', {page:'Sell a Card', 
                               menuId:'sellCard',
                               imageUrl: selectedCardImageUrl,
+                              mode: "SELL",
+                              cardFound: true});
+});
+
+router.post('/api/addCardToAnnonce', function(req, res) {
+  insertCardAnnonce(selectedCardDBID, sessionUserId);
+  findBuyers(selectedCardDBID)
+  res.render('sellcardView', {page:'Sell a Card', 
+                              menuId:'sellCard',
+                              imageUrl: selectedCardImageUrl,
+                              mode: "BUY",
                               cardFound: true});
 });
 
@@ -136,10 +156,26 @@ function insertCardUser(cardId, userId){
   });
 }
 
+function insertCardAnnonce(cardId, userId){
+  var sqlQuery = "INSERT INTO annonces (card_id, user_id) VALUES ?";
+  var sqlValues = [[cardId, userId]];
+  connect.query(sqlQuery,  [sqlValues], function(err, result) {
+    if (err) throw err;
+  });
+}
+
 function findSellers(cardId){
   connect.query("SELECT user_id FROM card_user WHERE card_id = " + mysql.escape(cardId), function(err, result) {
     if (err) throw err;
     console.log("FIND SELLERS")
+    console.log(result)
+  });
+}
+
+function findBuyers(cardId){
+  connect.query("SELECT user_id FROM annonces WHERE card_id = " + mysql.escape(cardId), function(err, result) {
+    if (err) throw err;
+    console.log("FIND BUYERS")
     console.log(result)
   });
 }
