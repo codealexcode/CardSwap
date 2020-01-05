@@ -5,7 +5,7 @@
 * Gaëtan LE MEUR
 * Fares EL KHOULY
 
-# I) Analyse
+# I) ANALYSE
 
 ## SUJET:
 
@@ -13,7 +13,7 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 
 ## BUTS PRINCIPAUX:
 
-- Les joueurs de cartes MTG et YUGIOH pourront sur la plate-frome (e-commerce):
+- Les joueurs de cartes MTG et YUGIOH pourront sur la plate-forme (e-commerce):
 
 	1) Se connecter et se déconnecter avec un profil paramétré
 	2) Rechercher des cartes qu'ils souhaitent acheter, vendre ou échanger
@@ -44,32 +44,33 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 	5) Notifications
 		- ?
 		
+# II) CONCEPTION
+
 ## CONCEPTION:
 
-POC:
+POC
 
-Etape 1 : requête sur les APIs
-- texte pour renseigner le nom d'une carte
-- bouton "envoyer" -> envoie le texte au serveur
-- serveur requête sur l'API
-- retourne le JSON au client
+Etape 1 : Permettre la connexion sécurisée utilisateur
+	- création des routes
+	- instantiation BDD avec phpMyAdmin
+	- création d'une view "page de connexion", Bootstrap? 
 
-Etape 2 - Instantiation BDD
-- Créer les tables (USER, SHOP, CARDS)
-- Gérer les transactions (ajout d'utilisateur, de cartes etc...)
+Etape 2 : Permettre la recherche d'une carte
+	- Texte pour renseigner le nom d'une carte
+	- Bouton "Envoyer" -> envoie le texte au serveur
+	- Serveur requête sur l'API et retourne le JSON au client
 
-Etape 3 : Recherche de carte 
-- texte pour renseigner le nom d'une carte
-- bouton "envoyer" -> envoie le texte au serveur
-- Recherche dans BDD des profils utilisiteurs et magasins correspondants 
+Etape 3 : Permettre l'enregistrement d'annonces achat ou vente de cartes en magasin
+	- Créer les tables (USER, SHOP, CARDS, ANNONCES)
+	- Gérer les transactions (ajout de cartes/annonces, suppression etc..)
 
 Etape 4 : Transaction entre utilisateur
-- Mise en relation (chat ?)
-- Historique des transaction (stats ?)
+	- Mise en relation (chat ?)
+	- Historique des transaction (stats ?)
 
 Etape 5 : Favoris et notification
-- Pouvoir renseigner des favoris (cartes voulues)
-- système de notification dès lors qu'un favori devient disponible dans la zone 
+	- Pouvoir renseigner des favoris (cartes voulues)
+	- système de notification dès lors qu'un favori devient disponible dans la zone 
 
 ## PLANNING:
 * Définir le model de donnée.
