@@ -27,12 +27,22 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 
 	1) Connection, déconnection, profil
 		- Page accueil utilisateur 
-		- Authentification sécurisée (utilisateur, mot de passe)
-		- Mise en pl
-
-- les cartes:
-	- requêtes sur les APIs MTG et YUGIOH
-	  (recherche de carte par nom, type etc...)
+		- Création de profil utilisateur
+		- Authentification (utilisateur, mot de passe) sécurisée (cryptée) 
+		- Mise en place d'une BDD utilisateurs 
+	2) Rechercher cartes
+		- Page recherche de cartes (par nom) 
+		- Mise en place d'une BDD cartes MTG et YUGIOH
+		- Utiliser les APIs MTG et YUGIOH (requêtes) 
+	3) Magasins cartes user (constitués d'annonces, "j'achète", "je vends")
+		- Page magasin de cartes (par annonces achats ou ventes)
+		- Mise en place d'une BDD magasin et annonces
+		- Permettre création ou suppréssion d'une annonce
+	4) Contacter les utilisteurs
+		- Page? Module?
+		- Enregistrement des messages? BDD? 
+	5) Notifications
+		- 
 
 - la mise en relation de plusieurs utilisateurs:
 	- chat potentiel
