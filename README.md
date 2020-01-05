@@ -46,14 +46,14 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 		
 # II) CONCEPTION
 
-## CONCEPTION:
+## POC:
 
-POC
+- Permettre :
 
-Etape 1 : Permettre la connexion sécurisée utilisateur
-	- création des routes
-	- instantiation BDD avec phpMyAdmin
-	- création d'une view "page de connexion", Bootstrap 
+	1) La connexion sécurisée utilisateur
+		- création des routes
+		- instantiation BDD avec phpMyAdmin
+		- création d'une view "page de connexion", Bootstrap 
 
 Etape 2 : Permettre la recherche d'une carte
 	- Texte pour renseigner le nom d'une carte
