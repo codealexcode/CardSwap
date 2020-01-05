@@ -8,10 +8,13 @@
 # I) Analyse
 
 ## SUJET:
+
 Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGIOH afin de leur permettre l'achat, la vente ou l'échange de cartes.
 
 ## BUTS PRINCIPAUX:
+
 - Les joueurs de cartes MTG et YUGIOH pourront sur la plate-frome (e-commerce):
+
 	1) Se connecter et se déconnecter avec un profil paramétré
 	2) Rechercher des cartes qu'ils souhaitent acheter, vendre ou échanger
 	3) Consulter les magasins (shops) des utilisateurs
@@ -19,7 +22,9 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 	5) Etre notifié (messages, transactions)
 
 ## SOUS-BUT PRINCIPAUX:
+
 - Il faudra donc pouvoir gérer:
+
 	1) Connection, déconnection, profil
 		- Page accueil utilisateur 
 		- Authentification sécurisée (utilisateur, mot de passe)
