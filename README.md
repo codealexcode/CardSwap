@@ -9,7 +9,7 @@
 
 ## SUJET:
 
-Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGIOH afin de leur permettre l'achat, la vente ou l'échange de cartes.
+Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGIOH afin de leur permettre l'achat, la vente ou l'échange de cartes
 
 ## BUTS PRINCIPAUX:
 
@@ -43,14 +43,7 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 		- Enregistrement des messages? BDD? 
 	5) Notifications
 		- ?
-
-## PLANNING:
-* Définir le model de donnée.
-* Recherche de cartes via les APIs.
-* Ajout de cartes dans la "vitrine".
-* Recherche de cartes dans l'application.
-* Messages entre utilisateurs. 
-
+		
 ## CONCEPTION:
 
 POC:
@@ -78,7 +71,12 @@ Etape 5 : Favoris et notification
 - Pouvoir renseigner des favoris (cartes voulues)
 - système de notification dès lors qu'un favori devient disponible dans la zone 
 
-
+## PLANNING:
+* Définir le model de donnée.
+* Recherche de cartes via les APIs.
+* Ajout de cartes dans la "vitrine".
+* Recherche de cartes dans l'application.
+* Messages entre utilisateurs. 
 
 ## PROTOTYPE:
 
