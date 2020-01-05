@@ -34,7 +34,7 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 		- Page recherche de cartes (par nom) 
 		- Mise en place d'une BDD cartes MTG et YUGIOH
 		- Utiliser les APIs MTG et YUGIOH (requêtes) 
-	3) Magasins cartes user (constitués d'annonces, "j'achète", "je vends")
+	3) Magasins cartes utilisateur (constitués d'annonces, "j'achète", "je vends")
 		- Page magasin de cartes (par annonces achats ou ventes)
 		- Mise en place d'une BDD magasin et annonces
 		- Permettre création ou suppréssion d'une annonce
@@ -42,11 +42,7 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 		- Page? Module?
 		- Enregistrement des messages? BDD? 
 	5) Notifications
-		- 
-
-- la mise en relation de plusieurs utilisateurs:
-	- chat potentiel
-	- service de vente potentiel
+		- ?
 
 ## PLANNING:
 * Définir le model de donnée.
