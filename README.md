@@ -5,62 +5,79 @@
 * Gaëtan LE MEUR
 * Fares EL KHOULY
 
+# I) ANALYSE
+
 ## SUJET:
-Création d'une platforme de mise en relation de joueurs de MTG et YUGIOH
-afin de permettre l'achat/l'échange de carte, le tout géolocalisé afin de
-rendre plus facile la vente/l'échange.
 
-## Il faut donc pouvoir gérer:
-- les utilisateurs:
-	- authentification
-	- géolocalisation
-	- "vitrine" de cartes
+Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGIOH afin de leur permettre l'achat, la vente ou l'échange de cartes
 
-- les cartes:
-	- requêtes sur les APIs MTG et YUGIOH
-	  (recherche de carte par nom, type etc...)
+## BUTS PRINCIPAUX:
 
-- la mise en relation de plusieurs utilisateurs:
-	- chat potentiel
-	- service de vente potentiel
+- Les joueurs de cartes MTG et YUGIOH pourront sur la plate-forme (e-commerce):
+
+	1) Se connecter et se déconnecter avec un profil paramétré
+	2) Rechercher des cartes qu'ils souhaitent acheter, vendre ou échanger
+	3) Consulter les magasins (shops) des utilisateurs
+	4) Contacter des utilisateurs 
+	5) Etre notifié (messages, transactions)
+
+## SOUS-BUT PRINCIPAUX:
+
+- Il faudra donc pouvoir gérer:
+
+	1) Connection, déconnection, profil
+		- Page accueil utilisateur 
+		- Création de profil utilisateur
+		- Authentification (utilisateur, mot de passe) sécurisée (cryptée) 
+		- Mise en place d'une BDD utilisateurs 
+	2) Rechercher cartes
+		- Page recherche de cartes (par nom) 
+		- Mise en place d'une BDD cartes MTG et YUGIOH
+		- Utiliser les APIs MTG et YUGIOH (requêtes) 
+	3) Magasins cartes utilisateur (constitués d'annonces, "j'achète", "je vends")
+		- Page magasin de cartes (par annonces achats ou ventes)
+		- Mise en place d'une BDD magasin et annonces
+		- Permettre création ou suppréssion d'une annonce
+	4) Contacter les utilisteurs
+		- Page? Module?
+		- Enregistrement des messages? BDD? 
+	5) Notifications
+		- ?
+		
+# II) CONCEPTION
+
+## CONCEPTION:
+
+POC
+
+Etape 1 : Permettre la connexion sécurisée utilisateur
+	- création des routes
+	- instantiation BDD avec phpMyAdmin
+	- création d'une view "page de connexion", Bootstrap? 
+
+Etape 2 : Permettre la recherche d'une carte
+	- Texte pour renseigner le nom d'une carte
+	- Bouton "Envoyer" -> envoie le texte au serveur
+	- Serveur requête sur l'API et retourne le JSON au client
+
+Etape 3 : Permettre l'enregistrement d'annonces achat ou vente de cartes en magasin
+	- Créer les tables (USER, SHOP, CARDS, ANNONCES)
+	- Gérer les transactions (ajout de cartes/annonces, suppression etc..)
+
+Etape 4 : Transaction entre utilisateur
+	- Mise en relation (chat ?)
+	- Historique des transaction (stats ?)
+
+Etape 5 : Favoris et notification
+	- Pouvoir renseigner des favoris (cartes voulues)
+	- système de notification dès lors qu'un favori devient disponible dans la zone 
 
 ## PLANNING:
 * Définir le model de donnée.
 * Recherche de cartes via les APIs.
 * Ajout de cartes dans la "vitrine".
-* Recherche de carte dans l'application.
-* Contact entre utilisateurs.
-
-## CONCEPTION:
-
-POC:
-
-Etape 1 : requête sur les APIs
-- texte pour renseigner le nom d'une carte
-- bouton "envoyer" -> envoie le texte au serveur
-- serveur requête sur l'API
-- retourne le JSON au client
-
-Etape 2 - Instantiation BDD
-- Créer les tables (USER, SHOP, CARDS)
-- Gérer les transactions (ajout d'utilisateur, de cartes etc...)
-
-Etape 3 : Recherche de carte par localisation utilisateur
-- texte pour renseigner le nom d'une carte
-- bouton "envoyer" -> envoie le texte au serveur
-- Recherche dans BDD des profils correspondants 
-(on trouve les shop qui contiennent la carte voulue, on en déduit les utilisateurs)
-(on filtre les utilisateurs par localisation)
-
-Etape 4 : Transaction entre utilisateur
-- Mise en relation (chat ?)
-- Historique des transaction (stats ?)
-
-Etape 5 : Favoris et notification
-- Pouvoir renseigner des favoris (cartes voulues)
-- système de notification dès lors qu'un favori devient disponible dans la zone 
-
-
+* Recherche de cartes dans l'application.
+* Messages entre utilisateurs. 
 
 ## PROTOTYPE:
 
