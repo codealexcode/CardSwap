@@ -5,14 +5,24 @@
 * Gaëtan LE MEUR
 * Fares EL KHOULY
 
-## SUJET:
-Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGIOH
-afin de permettre l'achat, l'échange ou la vente.
+# I) Analyser
 
-## Il faut donc pouvoir gérer:
-- les utilisateurs:
-	- authentification
-	- "vitrine" de cartes
+## SUJET:
+Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGIOH afin de leur permettre l'achat, la vente ou l'échange de cartes.
+
+## BUTS PRINCIPAUX:
+- Les joueurs de cartes MTG et YUGIOH pourront sur la plate-frome (e-commerce):
+	0) Se connecter et se déconnecter avec un profil paramétré
+	1) Rechercher des cartes qu'ils souhaitent acheter, vendre ou échanger
+	2) Consulter les magasins (shops) des utilisateurs
+	3) Contacter des utilisateurs 
+	4) Etre notifié (messages, transactions)
+
+## SOUS-BUT PRINCIPAUX:
+- Il faut donc pouvoir gérer:
+	0) Connection, déconnection, profil
+		- authentification sécurisée 
+		- "vitrine" de cartes
 
 - les cartes:
 	- requêtes sur les APIs MTG et YUGIOH
