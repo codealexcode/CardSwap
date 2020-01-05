@@ -1,0 +1,28 @@
+<style>
+
+    body{
+        height: 100%;
+        width: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+    }
+
+    a{
+        color: black;
+        text-decoration: none;
+    }
+
+    .panels-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .panel{
+        border: 2px solid black;
+        width: 400px;
+        padding-top: 200px;
+        padding-bottom: 200px;
+    }
+
+</style>

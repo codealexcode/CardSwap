@@ -2,28 +2,79 @@
 <html lang="en">
 <head>
  <% include partials/head %> 
+ <%- myCss.style %>
 </head>
 <body> 
 
   <div class="container">
 
-    <h3><%= page %></h3>
-    <br>
-    <img src="<%= imageUrl %>">
+    <div class="page-title">
+      <h3><%= page %></h3>
+    </div>
 
-    <%if (mode == "SELL") { %>
-      <form action='/api/addCardToShop' method="POST">
-        <button type="submit" class="btn btn-primary">ADD CARD TO SHOP</button>
-      </form>
-    <% } %>
+    <div class="content-container">
 
-    <%if (mode == "BUY") { %>
-      <form action='/api/addCardToAnnonce' method="POST">
-        <button type="submit" class="btn btn-primary">CREATE ANNONCE</button>
-      </form>
-    <% } %>
+      <% if(usersInfo.length > 0) {  %>
 
-    
+      <div class="element-container">
+
+        <div class="element-title-container">
+          <%if (mode == "SELL") { %>
+            Card Buyers
+          <% } %>
+
+          <%if (mode == "BUY") { %>
+            Card Sellers
+          <% } %>
+        </div>
+
+        <div class="list-container">
+
+          <% for (var element in usersInfo) {%>
+  
+            <div class="element">
+
+              <div class="element-field">
+                name : <%= usersInfo[element].name  %>
+              </div>
+
+              <div class="element-field">
+                adress : <%= usersInfo[element].adress  %>
+              </div>
+  
+            </div>
+  
+          <%}%>
+  
+        </div>
+
+      </div>
+
+      <% } %>
+
+      <div class="result-container">
+
+        <div class="image-container">
+          <img src="<%= imageUrl %>">
+        </div>
+
+        <div class="button-container">
+          <%if (mode == "SELL") { %>
+            <form action='/api/addCardToShop' method="POST">
+              <button type="submit" class="btn btn-primary">ADD CARD TO SHOP</button>
+            </form>
+          <% } %>
+      
+          <%if (mode == "BUY") { %>
+            <form action='/api/addCardToAnnonce' method="POST">
+              <button type="submit" class="btn btn-primary">CREATE ANNONCE</button>
+            </form>
+          <% } %>
+        </div>
+
+      </div>
+
+    </div>
 
   </div>
 

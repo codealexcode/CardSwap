@@ -4,6 +4,7 @@ const https = require('https');
 var sql = require('mssql')
 var mysql = require('mysql')
 var Request = require("request");
+var fs = require('fs');
 var router = express.Router();
 
 var sessionUsername
@@ -25,14 +26,21 @@ const connect = mysql.createConnection({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', {page:'Home', menuId:'home'});
+  myCss =  {
+    style: fs.readFileSync("./css/style.css", "utf8")
+  }
+  res.render('index', {page:'Home', menuId:'home', myCss: myCss});
 });
 
 router.get('/findcardView', function(req, res, next) {
+  myCss =  {
+    style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
+  }
   res.render('findcardView', {page:'Find a Card', 
                               menuId:'findCard',
                               imageUrl: '',
-                              cardFound: false});
+                              cardFound: false,
+                              myCss: myCss});
 });
 
 router.post('/api/login/', function(req, res) {
@@ -47,9 +55,13 @@ router.post('/api/login/', function(req, res) {
       if(result[0].name === username && result[0].password === password){
         sessionUsername = username
         sessionUserId = result[0].id
+        myCss =  {
+          style: fs.readFileSync("./css/homepageStyle.css", "utf8")
+        }
         res.render('homepage', {page:'Homepage', 
                                 menuId:'homepage',  
-                                username: username});
+                                username: username,
+                                myCss: myCss});
       }
     });
   });
@@ -70,10 +82,14 @@ router.post('/api/findCard/', function(req, res) {
       selectedCardImageUrl = cardFound.imageUrl
       selectedCardGame = "MTG"
       insertCard(selectedCardName, selectedCardId, selectedCardImageUrl, selectedCardGame);
+      myCss =  {
+        style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
+      }
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
                                   imageUrl: selectedCardImageUrl,
-                                  cardFound: true});
+                                  cardFound: true,
+                                  myCss: myCss});
       
     });
   } else if(optionYUGIOH){
@@ -87,49 +103,141 @@ router.post('/api/findCard/', function(req, res) {
       selectedCardImageUrl = cardFound["card_images"][0].image_url
       selectedCardGame = "YUGIOH"
       insertCard(selectedCardName, selectedCardId, selectedCardImageUrl, selectedCardGame);
+      myCss =  {
+        style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
+      }
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
                                   imageUrl: selectedCardImageUrl,
-                                  cardFound: true});
+                                  cardFound: true,
+                                  myCss: myCss});
     });
   } else{}
 });
 
 router.post('/api/sellCard/', function(req, res) {
-  res.render('sellcardView', {page:'Sell a Card', 
-                              menuId:'sellCard',
-                              imageUrl: selectedCardImageUrl,
-                              mode: "SELL",
-                              cardFound: true});
+
+  myCss =  {
+    style: fs.readFileSync("./css/sellCardViewStyle.css", "utf8")
+  }
+
+  var userIDQuery = "SELECT user_id FROM annonces WHERE card_id = " + mysql.escape(selectedCardDBID)
+  var result = []
+  connect.query(userIDQuery, function(err, resultUser) {
+    if(err) throw err;
+    var i = 0
+    var idsToFind  = ""
+    while(resultUser[i]){
+      idsToFind += "id = " + mysql.escape(resultUser[i].user_id) +  " OR "
+      i++
+    }
+    if(idsToFind === ""){
+      res.render('sellcardView', {page:'Sell a Card', 
+                            menuId:'sellCard',
+                            imageUrl: selectedCardImageUrl,
+                            mode: "SELL",
+                            cardFound: true,
+                            myCss: myCss,
+                            usersInfo: result});
+    } else{
+      idsToFind  = idsToFind.substring(0,  idsToFind.length - 3)
+      var userInfoQuery = "SELECT * FROM user WHERE " + idsToFind
+      connect.query(userInfoQuery, function(err, resultUserInfo) {
+        if (err) throw err;
+        var j = 0
+        while(resultUserInfo[j]){
+          var userInfo = {name: resultUserInfo[j].name, 
+                          adress: resultUserInfo[j].adress,
+                          id: resultUserInfo[j].id}
+          result.push(userInfo)
+          j++
+        }
+        res.render('sellcardView', {page:'Sell a Card', 
+                                    menuId:'sellCard',
+                                    imageUrl: selectedCardImageUrl,
+                                    mode: "SELL",
+                                    cardFound: true,
+                                    myCss: myCss,
+                                    usersInfo: result});
+      });
+    }
+  });
 });
 
 router.post('/api/buyCard/', function(req, res) {
-  res.render('sellcardView', {page:'Sell a Card', 
-                              menuId:'sellCard',
-                              imageUrl: selectedCardImageUrl,
-                              mode: "BUY",
-                              cardFound: true});
+
+  myCss =  {
+    style: fs.readFileSync("./css/sellCardViewStyle.css", "utf8")
+  }
+
+  var userIDQuery = "SELECT user_id FROM card_user WHERE card_id = " + mysql.escape(selectedCardDBID)
+  var result = []
+  connect.query(userIDQuery, function(err, resultUser) {
+    if(err) throw err;
+    var i = 0
+    var idsToFind = ""
+    while(resultUser[i]){
+      idsToFind += "id = " + mysql.escape(resultUser[i].user_id) +  " OR "
+      i++
+    }
+    if(idsToFind === ""){
+      res.render('sellcardView', {page:'Buy a Card', 
+                                    menuId:'sellCard',
+                                    imageUrl: selectedCardImageUrl,
+                                    mode: "BUY",
+                                    cardFound: true,
+                                    myCss: myCss,
+                                    usersInfo: result});
+    }else{
+      idsToFind  = idsToFind.substring(0,  idsToFind.length - 3)
+      var userInfoQuery = "SELECT * FROM user WHERE " + idsToFind
+      connect.query(userInfoQuery, function(err, resultUserInfo) {
+        if (err) throw err;
+        var j = 0
+        while(resultUserInfo[j]){
+          var userInfo = {name: resultUserInfo[j].name, 
+                          adress: resultUserInfo[j].adress,
+                          id: resultUserInfo[j].id}
+          result.push(userInfo)
+          j++
+        }
+
+        res.render('sellcardView', {page:'Buy a Card', 
+                                    menuId:'sellCard',
+                                    imageUrl: selectedCardImageUrl,
+                                    mode: "BUY",
+                                    cardFound: true,
+                                    myCss: myCss,
+                                    usersInfo: result});
+      });
+    }
+  });
 });
 
 router.post('/api/addCardToShop', function(req, res) {
   insertCardUser(selectedCardDBID, sessionUserId);
-  findSellers(selectedCardDBID)
-  res.render('sellcardView', {page:'Sell a Card', 
-                              menuId:'sellCard',
+  myCss =  {
+    style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
+  }
+  res.render('findcardView', {page:'Find a Card', 
+                              menuId:'findCard',
                               imageUrl: selectedCardImageUrl,
-                              mode: "SELL",
-                              cardFound: true});
+                              cardFound: true,
+                              myCss: myCss});
 });
 
 router.post('/api/addCardToAnnonce', function(req, res) {
   insertCardAnnonce(selectedCardDBID, sessionUserId);
-  findBuyers(selectedCardDBID)
-  res.render('sellcardView', {page:'Sell a Card', 
-                              menuId:'sellCard',
+  myCss =  {
+    style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
+  }
+  res.render('findcardView', {page:'Find a Card', 
+                              menuId:'findCard',
                               imageUrl: selectedCardImageUrl,
-                              mode: "BUY",
-                              cardFound: true});
+                              cardFound: true,
+                              myCss: myCss});
 });
+
 
 function insertCard(name, id, imageUrl,  game){
   connect.query("SELECT * FROM card WHERE game = " + mysql.escape(game) + 
@@ -165,21 +273,50 @@ function insertCardAnnonce(cardId, userId){
 }
 
 function findSellers(cardId){
-  connect.query("SELECT user_id FROM card_user WHERE card_id = " + mysql.escape(cardId), function(err, result) {
+
+  var query  =  "SELECT * FROM user WHERE id = "  + 
+                "(SELECT user_id FROM card_user WHERE card_id = " + mysql.escape(cardId) + ")"
+
+  connect.query(query, function(err, result) {
     if (err) throw err;
     console.log("FIND SELLERS")
     console.log(result)
+
+    var i = 0;
+    while(result[i]){
+
+    }
+
+    return result;
   });
 }
 
 function findBuyers(cardId){
-  connect.query("SELECT user_id FROM annonces WHERE card_id = " + mysql.escape(cardId), function(err, result) {
-    if (err) throw err;
-    console.log("FIND BUYERS")
-    console.log(result)
+  var userIDQuery = "SELECT user_id FROM annonces WHERE card_id = " + mysql.escape(cardId)
+  var result = []
+  connect.query(userIDQuery, function(err, resultUser) {
+    if(err) throw err;
+    console.log("RESULT USER ID")
+    console.log(resultUser)
+    var i = 0
+    var idsToFind  = ""
+    while(resultUser[i]){
+      idsToFind += "id = " + mysql.escape(resultUser[i].user_id) +  " OR "
+      i++
+    }
+    idsToFind  = idsToFind.substring(0,  idsToFind.length - 3)
+    var userInfoQuery = "SELECT * FROM user WHERE " + idsToFind
+    connect.query(userInfoQuery, function(err, resultUserInfo) {
+      if (err) throw err;
+      var j = 0
+      while(resultUserInfo[j]){
+        var userInfoStr = resultUserInfo[j].name + "/" + resultUserInfo[j].adress;
+        result.push(userInfoStr)
+        j++
+      }
+      return result
+    });
   });
 }
-
-
 
 module.exports = router;
