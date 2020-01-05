@@ -6,14 +6,12 @@
 * Fares EL KHOULY
 
 ## SUJET:
-Création d'une platforme de mise en relation de joueurs de MTG et YUGIOH
-afin de permettre l'achat/l'échange de carte, le tout géolocalisé afin de
-rendre plus facile la vente/l'échange.
+Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGIOH
+afin de permettre l'achat, l'échange ou la vente.
 
 ## Il faut donc pouvoir gérer:
 - les utilisateurs:
 	- authentification
-	- géolocalisation
 	- "vitrine" de cartes
 
 - les cartes:
@@ -28,8 +26,8 @@ rendre plus facile la vente/l'échange.
 * Définir le model de donnée.
 * Recherche de cartes via les APIs.
 * Ajout de cartes dans la "vitrine".
-* Recherche de carte dans l'application.
-* Contact entre utilisateurs.
+* Recherche de cartes dans l'application.
+* Messages entre utilisateurs. 
 
 ## CONCEPTION:
 
@@ -45,12 +43,10 @@ Etape 2 - Instantiation BDD
 - Créer les tables (USER, SHOP, CARDS)
 - Gérer les transactions (ajout d'utilisateur, de cartes etc...)
 
-Etape 3 : Recherche de carte par localisation utilisateur
+Etape 3 : Recherche de carte 
 - texte pour renseigner le nom d'une carte
 - bouton "envoyer" -> envoie le texte au serveur
-- Recherche dans BDD des profils correspondants 
-(on trouve les shop qui contiennent la carte voulue, on en déduit les utilisateurs)
-(on filtre les utilisateurs par localisation)
+- Recherche dans BDD des profils utilisiteurs et magasins correspondants 
 
 Etape 4 : Transaction entre utilisateur
 - Mise en relation (chat ?)
