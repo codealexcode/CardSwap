@@ -60,15 +60,15 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 		- Bouton "Envoyer" -> envoie le texte au serveur
 		- Serveur requête sur l'API et retourne le JSON au client
 
-	3) Permettre l'enregistrement d'annonces achat ou vente de cartes en magasin
+	3) L'enregistrement d'annonces achat ou vente de cartes en magasin
 		- Créer les tables (USER, SHOP, CARDS, ANNONCES)
 		- Gérer les transactions (ajout de cartes/annonces, suppression etc..)
 
-	4) Transaction entre utilisateur
+	4) La transaction entre utilisateur
 		- Mise en relation (chat ?)
 		- Historique des transaction (stats ?)
 
-	Etape 5) Favoris et notification
+	5) Favoris et notification
 		- Pouvoir renseigner des favoris (cartes voulues)
 		- système de notification dès lors qu'un favori devient disponible dans la zone 
 
