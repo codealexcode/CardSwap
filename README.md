@@ -46,31 +46,31 @@ Création d'une plate-forme de mise en relation de joueurs de cartes MTG et YUGI
 		
 # II) CONCEPTION
 
-## CONCEPTION:
+## POC:
 
-POC
+- Par étape, permettre :
 
-Etape 1 : Permettre la connexion sécurisée utilisateur
-	- création des routes
-	- instantiation BDD avec phpMyAdmin
-	- création d'une view "page de connexion", Bootstrap? 
+	1) La connexion sécurisée utilisateur
+		- création des routes
+		- instantiation BDD avec phpMyAdmin
+		- création d'une view "page de connexion", Bootstrap 
 
-Etape 2 : Permettre la recherche d'une carte
-	- Texte pour renseigner le nom d'une carte
-	- Bouton "Envoyer" -> envoie le texte au serveur
-	- Serveur requête sur l'API et retourne le JSON au client
+	2) La recherche d'une carte
+		- Texte pour renseigner le nom d'une carte
+		- Bouton "Envoyer" -> envoie le texte au serveur
+		- Serveur requête sur l'API et retourne le JSON au client
 
-Etape 3 : Permettre l'enregistrement d'annonces achat ou vente de cartes en magasin
-	- Créer les tables (USER, SHOP, CARDS, ANNONCES)
-	- Gérer les transactions (ajout de cartes/annonces, suppression etc..)
+	3) L'enregistrement d'annonces achat ou vente de cartes en magasin
+		- Créer les tables (USER, SHOP, CARDS, ANNONCES)
+		- Gérer les transactions (ajout de cartes/annonces, suppression etc..)
 
-Etape 4 : Transaction entre utilisateur
-	- Mise en relation (chat ?)
-	- Historique des transaction (stats ?)
+	4) La transaction entre utilisateur
+		- Mise en relation (chat ?)
+		- Historique des transaction (stats ?)
 
-Etape 5 : Favoris et notification
-	- Pouvoir renseigner des favoris (cartes voulues)
-	- système de notification dès lors qu'un favori devient disponible dans la zone 
+	5) Favoris et notification
+		- Pouvoir renseigner des favoris (cartes voulues)
+		- système de notification dès lors qu'un favori devient disponible dans la zone 
 
 ## PLANNING:
 * Définir le model de donnée.
