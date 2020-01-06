@@ -19,22 +19,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-/*
-const config = {
-  name: 'middleware_config',
-  store: this.store,
-  secret: 'bar',
-  saveUninitialized: true,
-  resave: false,  
-  rolling: true
-};
-const middleware = session(config);
-app.use(middleware);
-*/
-
-app.use((session({secret: "littlesecret",
-                  saveUninitialized: true,
-                  resave: false})))
+app.use((session({key: 'user_sid',
+                  secret: "littlesecret",
+                  saveUninitialized: false,
+                  resave: false,
+                  cookie: {
+                    expires: 600000
+                  }
+})))
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

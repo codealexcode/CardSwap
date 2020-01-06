@@ -31,18 +31,6 @@ router.get('/', function(req, res, next) {
   }
 });
 
-router.get('/findcardView', function(req, res, next) {
-  console.log(req)
-  myCss =  {
-    style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
-  }
-  res.render('findcardView', {page:'Find a Card', 
-                              menuId:'findCard',
-                              imageUrl: '',
-                              cardFound: false,
-                              myCss: myCss});
-});
-
 router.post('/api/login/', function(req, res) {
 
   console.log(req)
@@ -68,6 +56,18 @@ router.post('/api/login/', function(req, res) {
                               myCss: myCss});
     }
   });
+});
+
+router.get('/findcardView', function(req, res, next) {
+  console.log(req)
+  myCss =  {
+    style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
+  }
+  res.render('findcardView', {page:'Find a Card', 
+                              menuId:'findCard',
+                              imageUrl: '',
+                              cardFound: false,
+                              myCss: myCss});
 });
 
 router.post('/api/findCard/', function(req, res) {
