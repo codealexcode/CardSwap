@@ -1,20 +1,12 @@
 var express = require('express');
 const mtg = require('mtgsdk');
-const https = require('https');
-var sql = require('mssql')
 var mysql = require('mysql')
 var Request = require("request");
 var fs = require('fs');
+
 var router = express.Router();
 
-var sessionUsername
-var sessionUserId
-
-var selectedCardName
-var selectedCardImageUrl
-var selectedCardId
-var selectedCardDBID
-var selectedCardGame
+var dbConnected = false
 
 const connect = mysql.createConnection({
   host: "localhost",
@@ -27,12 +19,20 @@ const connect = mysql.createConnection({
 /* GET home page. */
 router.get('/', function(req, res, next) {
   myCss =  {
-    style: fs.readFileSync("./css/style.css", "utf8")
+    style: fs.readFileSync("./css/indexStyle.css", "utf8")
   }
-  res.render('index', {page:'Home', menuId:'home', myCss: myCss});
+  if(!dbConnected){
+    connect.connect(function(err){
+      dbConnected = true
+      res.render('index', {page:'CARDSWAP', menuId:'home', myCss: myCss});
+    });
+  }else{
+    res.render('index', {page:'CARDSWAP', menuId:'home', myCss: myCss});
+  }
 });
 
 router.get('/findcardView', function(req, res, next) {
+  console.log(req)
   myCss =  {
     style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
   }
@@ -44,26 +44,29 @@ router.get('/findcardView', function(req, res, next) {
 });
 
 router.post('/api/login/', function(req, res) {
+
+  console.log(req)
+
   const username = req.body.username
   const password = req.body.password
+  connect.query('SELECT * FROM user WHERE name = ' +  mysql.escape(username), function(err, result) {
+    if(err) console.log(err)
+    if(result[0].name === username && result[0].password === password){
+      req.session.userName = username
+      req.session.userId = result[0].id
+      req.session.save()
 
-  connect.connect(function(err){
-    if (err) throw err;
-    console.log("Connected!");
-    connect.query('SELECT * FROM user WHERE name = ' +  mysql.escape(username), function(err, result) {
-      if(err) console.log(err)
-      if(result[0].name === username && result[0].password === password){
-        sessionUsername = username
-        sessionUserId = result[0].id
-        myCss =  {
-          style: fs.readFileSync("./css/homepageStyle.css", "utf8")
-        }
-        res.render('homepage', {page:'Homepage', 
-                                menuId:'homepage',  
-                                username: username,
-                                myCss: myCss});
+      console.log("SESSION USER NAME: " + req.session.userName)
+      console.log("SESSION USER ID: " + req.session.userId)
+
+      myCss =  {
+        style: fs.readFileSync("./css/homepageStyle.css", "utf8")
       }
-    });
+      res.render('homepage', {page:'Homepage', 
+                              menuId:'homepage',  
+                              username: username,
+                              myCss: myCss});
+    }
   });
 });
 
@@ -77,17 +80,40 @@ router.post('/api/findCard/', function(req, res) {
     mtg.card.where({ name: cardName})
     .then(cards => {
       cardFound = cards[0]
-      selectedCardName = cardFound.name
-      selectedCardId  = cardFound.id
-      selectedCardImageUrl = cardFound.imageUrl
-      selectedCardGame = "MTG"
-      insertCard(selectedCardName, selectedCardId, selectedCardImageUrl, selectedCardGame);
+      req.session.selectedCardName = cardFound.name
+      req.session.selectedCardId  = cardFound.id
+      req.session.selectedCardImageUrl = cardFound.imageUrl
+      req.session.selectedCardGame = "MTG"
+      req.session.save()
+      connect.query("SELECT * FROM card WHERE game = " + mysql.escape(req.session.selectedCardGame) + 
+                                      "AND card_id = " + mysql.escape(req.session.selectedCardId), function(err, result) {
+        if(err) console.log(err)
+        if(!result[0]){
+          var sqlQuery = "INSERT INTO card (game, name, card_id,  image_url) VALUES ?";
+          var sqlValues = [[req.session.selectedCardGame, 
+                            req.session.selectedCardName, 
+                            req.session.selectedCardId, 
+                            req.session.selectedCardImageUrl]];
+          connect.query(sqlQuery,  [sqlValues], function(err, result) {
+            if (err) throw err;
+            req.session.selectedCardDBId = result.insertId
+            req.session.save()
+          });
+        } else {
+          req.session.selectedCardDBId = result[0].id
+          req.session.save()
+        }
+      });
       myCss =  {
         style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
       }
+
+      console.log("SESSION USER NAME: " + req.session.userName)
+      console.log("SESSION USER ID: " + req.session.userId)
+
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
-                                  imageUrl: selectedCardImageUrl,
+                                  imageUrl: req.session.selectedCardImageUrl,
                                   cardFound: true,
                                   myCss: myCss});
       
@@ -98,17 +124,36 @@ router.post('/api/findCard/', function(req, res) {
       if(error) return console.log(error);
       const cardsFound = JSON.parse(body);
       cardFound = cardsFound[0];
-      selectedCardName = cardFound.name
-      selectedCardId  = cardFound.id
-      selectedCardImageUrl = cardFound["card_images"][0].image_url
-      selectedCardGame = "YUGIOH"
-      insertCard(selectedCardName, selectedCardId, selectedCardImageUrl, selectedCardGame);
+      req.session.selectedCardName = cardFound.name
+      req.session.selectedCardId  = cardFound.id
+      req.session.selectedCardImageUrl = cardFound["card_images"][0].image_url
+      req.session.selectedCardGame = "YUGIOH"
+      req.session.save()
+      connect.query("SELECT * FROM card WHERE game = " + mysql.escape(req.session.selectedCardGame) + 
+                                      "AND card_id = " + mysql.escape(req.session.selectedCardId), function(err, result) {
+        if(err) console.log(err)
+        if(!result[0]){
+          var sqlQuery = "INSERT INTO card (game, name, card_id, image_url) VALUES ?";
+          var sqlValues = [[req.session.selectedCardGame, 
+                            req.session.selectedCardName, 
+                            req.session.selectedCardId, 
+                            req.session.selectedCardImageUrl]];
+          connect.query(sqlQuery, [sqlValues], function(err, result) {
+            if (err) throw err;
+            req.session.selectedCardDBId = result.insertId
+            req.session.save()
+          });
+        } else {
+          req.session.selectedCardDBId = result[0].id
+          req.session.save()
+        }
+      });
       myCss =  {
         style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
       }
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
-                                  imageUrl: selectedCardImageUrl,
+                                  imageUrl: req.session.selectedCardImageUrl,
                                   cardFound: true,
                                   myCss: myCss});
     });
@@ -121,7 +166,7 @@ router.post('/api/sellCard/', function(req, res) {
     style: fs.readFileSync("./css/sellCardViewStyle.css", "utf8")
   }
 
-  var userIDQuery = "SELECT user_id FROM annonces WHERE card_id = " + mysql.escape(selectedCardDBID)
+  var userIDQuery = "SELECT user_id FROM annonces WHERE card_id = " + mysql.escape(req.session.selectedCardDBId)
   var result = []
   connect.query(userIDQuery, function(err, resultUser) {
     if(err) throw err;
@@ -134,7 +179,7 @@ router.post('/api/sellCard/', function(req, res) {
     if(idsToFind === ""){
       res.render('sellcardView', {page:'Sell a Card', 
                             menuId:'sellCard',
-                            imageUrl: selectedCardImageUrl,
+                            imageUrl: req.session.selectedCardImageUrl,
                             mode: "SELL",
                             cardFound: true,
                             myCss: myCss,
@@ -154,7 +199,7 @@ router.post('/api/sellCard/', function(req, res) {
         }
         res.render('sellcardView', {page:'Sell a Card', 
                                     menuId:'sellCard',
-                                    imageUrl: selectedCardImageUrl,
+                                    imageUrl: req.session.selectedCardImageUrl,
                                     mode: "SELL",
                                     cardFound: true,
                                     myCss: myCss,
@@ -170,7 +215,7 @@ router.post('/api/buyCard/', function(req, res) {
     style: fs.readFileSync("./css/sellCardViewStyle.css", "utf8")
   }
 
-  var userIDQuery = "SELECT user_id FROM card_user WHERE card_id = " + mysql.escape(selectedCardDBID)
+  var userIDQuery = "SELECT user_id FROM card_user WHERE card_id = " + mysql.escape(req.session.selectedCardDBId)
   var result = []
   connect.query(userIDQuery, function(err, resultUser) {
     if(err) throw err;
@@ -183,7 +228,7 @@ router.post('/api/buyCard/', function(req, res) {
     if(idsToFind === ""){
       res.render('sellcardView', {page:'Buy a Card', 
                                     menuId:'sellCard',
-                                    imageUrl: selectedCardImageUrl,
+                                    imageUrl: req.session.selectedCardImageUrl,
                                     mode: "BUY",
                                     cardFound: true,
                                     myCss: myCss,
@@ -204,7 +249,7 @@ router.post('/api/buyCard/', function(req, res) {
 
         res.render('sellcardView', {page:'Buy a Card', 
                                     menuId:'sellCard',
-                                    imageUrl: selectedCardImageUrl,
+                                    imageUrl: req.session.selectedCardImageUrl,
                                     mode: "BUY",
                                     cardFound: true,
                                     myCss: myCss,
@@ -215,31 +260,31 @@ router.post('/api/buyCard/', function(req, res) {
 });
 
 router.post('/api/addCardToShop', function(req, res) {
-  insertCardUser(selectedCardDBID, sessionUserId);
+  insertCardUser(req.session.selectedCardDBId, req.session.userId);
   myCss =  {
     style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
   }
   res.render('findcardView', {page:'Find a Card', 
                               menuId:'findCard',
-                              imageUrl: selectedCardImageUrl,
+                              imageUrl: req.session.selectedCardImageUrl,
                               cardFound: true,
                               myCss: myCss});
 });
 
 router.post('/api/addCardToAnnonce', function(req, res) {
-  insertCardAnnonce(selectedCardDBID, sessionUserId);
+  insertCardAnnonce(req.session.selectedCardDBId, req.session.userId);
   myCss =  {
     style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
   }
   res.render('findcardView', {page:'Find a Card', 
                               menuId:'findCard',
-                              imageUrl: selectedCardImageUrl,
+                              imageUrl: req.session.selectedCardImageUrl,
                               cardFound: true,
                               myCss: myCss});
 });
 
 
-function insertCard(name, id, imageUrl,  game){
+function insertCard(name, id, imageUrl, game){
   connect.query("SELECT * FROM card WHERE game = " + mysql.escape(game) + 
                                   "AND card_id = " + mysql.escape(id), function(err, result) {
     if(err) console.log(err)
@@ -248,10 +293,12 @@ function insertCard(name, id, imageUrl,  game){
       var sqlValues = [[game, name, id, imageUrl]];
       connect.query(sqlQuery,  [sqlValues], function(err, result) {
         if (err) throw err;
-        selectedCardDBID = result.insertId
+        req.session.selectedCardDBId = result.insertId
+        req.session.save()
       });
     } else {
-      selectedCardDBID = result[0].id
+      req.session.selectedCardDBId = result[0].id
+      req.session.save()
     }
   });
 }
