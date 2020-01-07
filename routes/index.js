@@ -9,11 +9,11 @@ var router = express.Router();
 var dbConnected = false
 
 const connect = mysql.createConnection({
-  host: "localhost",
-  port: "3308",
-  user: "root",
-  password: "",
-  database: "cardswap"
+  host: "mysql-cardswap.alwaysdata.net",
+  port: "3306",
+  user: "cardswap",
+  password: "Azerty1234!",
+  database: "cardswap_card"
 });
 
 /* GET home page. */
