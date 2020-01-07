@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partials/head %> 
+ <style>
+   body{
+        height: 100%;
+        width: 100%;
+        font-family: Arial, Helvetica, sans-serif;
+        text-align: center;
+    }
+
+    button{
+        background-color: #0099ff;
+        border: none;
+        border-radius: 5px;
+        color: whitesmoke;
+        padding: 15px 32px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    button:hover{
+        background-color: #007acc;
+        cursor: pointer;
+    }
+
+    .container{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    .content-container{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        margin-top: 50px;
+    }
+
+    .element-container{
+        width: 400px;
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        padding: 10px;
+        background-color: #e6e6e6;
+    }
+
+    .list-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        margin-top: 25px;
+        text-align: start;
+    }
+
+    .element{
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        text-align: start;
+        margin-top: 25px;
+        padding: 10px;
+        background-color: #0099ff;
+        border-radius: 5px;
+        color: whitesmoke;
+    }
+
+    .element:hover{
+        background-color: #007acc;
+        cursor: pointer;
+    }
+
+    .element-fiels{
+        height: 30px;
+        text-align: start;
+    }
+
+    .result-container{
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+    }
+
+    .image-container{
+        width: 400px;
+        height: 600px;
+    }
+
+    .image-container  img{
+        width: 100%;
+        height: auto;
+    }
+
+    .homepageLink{
+      align-content: flex-start;
+    }
+ </style>
+ 
+</head>
+<body> 
+
+  <div class="container">
+
+    <div class="page-title">
+      <h3><%= page %></h3>
+    </div>
+
+    <a href="/homepage" class="homepageLink">
+      <div>HOMEPAGE</div>
+    </a>
+
+    <div class="content-container">
+
+      <% if(usersInfo.length > 0) {  %>
+
+      <div class="element-container">
+
+        <div class="element-title-container">
+          <%if (mode == "SELL") { %>
+            Card Buyers
+          <% } %>
+
+          <%if (mode == "BUY") { %>
+            Card Sellers
+          <% } %>
+        </div>
+
+        <div class="list-container">
+
+          <% for (var element in usersInfo) {%>
+  
+            <div class="element">
+
+              <div class="element-field">
+                name : <%= usersInfo[element].name  %>
+              </div>
+
+              <div class="element-field">
+                adress : <%= usersInfo[element].adress  %>
+              </div>
+  
+            </div>
+  
+          <%}%>
+  
+        </div>
+
+      </div>
+
+      <% } %>
+
+      <div class="result-container">
+
+        <div class="image-container">
+          <img src="<%= imageUrl %>">
+        </div>
+
+        <div class="button-container">
+          <%if (mode == "SELL") { %>
+            <form action='/api/addCardToShop' method="POST">
+              <button type="submit" class="btn btn-primary">ADD CARD TO SHOP</button>
+            </form>
+          <% } %>
+      
+          <%if (mode == "BUY") { %>
+            <form action='/api/addCardToAnnonce' method="POST">
+              <button type="submit" class="btn btn-primary">CREATE ANNONCE</button>
+            </form>
+          <% } %>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+<% include partials/script %>
+</html>
