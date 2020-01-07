@@ -10,7 +10,7 @@ var dbConnected = false
 
 const connect = mysql.createConnection({
   host: "localhost",
-  port: "3308",
+  port: "3306",
   user: "root",
   password: "",
   database: "cardswap"
@@ -33,7 +33,7 @@ router.get('/', function(req, res, next) {
 
 router.post('/api/login/', function(req, res) {
 
-  console.log(req)
+  //console.log(req)
 
   const username = req.body.username
   const password = req.body.password
@@ -52,11 +52,19 @@ router.post('/api/login/', function(req, res) {
       }
       res.render('homepage', {page:'Homepage', 
                               menuId:'homepage',  
-                              username: username,
                               myCss: myCss});
     }
   });
 });
+
+router.get('/homepage', function(req, res) {
+  myCss =  {
+    style: fs.readFileSync("./css/homepageStyle.css", "utf8")
+  }
+  res.render('homepage', {page:'Homepage', 
+                          menuId:'homepage',  
+                          myCss: myCss});
+})
 
 router.get('/findcardView', function(req, res, next) {
   console.log(req)
