@@ -18,16 +18,13 @@ const connect = mysql.createConnection({
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  myCss =  {
-    style: fs.readFileSync("./css/indexStyle.css", "utf8")
-  }
   if(!dbConnected){
     connect.connect(function(err){
       dbConnected = true
-      res.render('index', {page:'CARDSWAP', menuId:'home', myCss: myCss});
+      res.render('index', {page:'CARDSWAP', menuId:'home'});
     });
   }else{
-    res.render('index', {page:'CARDSWAP', menuId:'home', myCss: myCss});
+    res.render('index', {page:'CARDSWAP', menuId:'home'});
   }
 });
 
@@ -46,36 +43,22 @@ router.post('/api/login/', function(req, res) {
 
       console.log("SESSION USER NAME: " + req.session.userName)
       console.log("SESSION USER ID: " + req.session.userId)
-
-      myCss =  {
-        style: fs.readFileSync("./css/homepageStyle.css", "utf8")
-      }
       res.render('homepage', {page:'Homepage', 
-                              menuId:'homepage',  
-                              myCss: myCss});
+                              menuId:'homepage'});
     }
   });
 });
 
 router.get('/homepage', function(req, res) {
-  myCss =  {
-    style: fs.readFileSync("./css/homepageStyle.css", "utf8")
-  }
   res.render('homepage', {page:'Homepage', 
-                          menuId:'homepage',  
-                          myCss: myCss});
+                          menuId:'homepage'});
 })
 
 router.get('/findcardView', function(req, res, next) {
-  console.log(req)
-  myCss =  {
-    style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
-  }
   res.render('findcardView', {page:'Find a Card', 
                               menuId:'findCard',
                               imageUrl: '',
-                              cardFound: false,
-                              myCss: myCss});
+                              cardFound: false});
 });
 
 router.post('/api/findCard/', function(req, res) {
@@ -112,18 +95,10 @@ router.post('/api/findCard/', function(req, res) {
           req.session.save()
         }
       });
-      myCss =  {
-        style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
-      }
-
-      console.log("SESSION USER NAME: " + req.session.userName)
-      console.log("SESSION USER ID: " + req.session.userId)
-
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
                                   imageUrl: req.session.selectedCardImageUrl,
-                                  cardFound: true,
-                                  myCss: myCss});
+                                  cardFound: true});
       
     });
   } else if(optionYUGIOH){
@@ -156,23 +131,15 @@ router.post('/api/findCard/', function(req, res) {
           req.session.save()
         }
       });
-      myCss =  {
-        style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
-      }
       res.render('findcardView', {page:'Find a Card', 
                                   menuId:'findCard',
                                   imageUrl: req.session.selectedCardImageUrl,
-                                  cardFound: true,
-                                  myCss: myCss});
+                                  cardFound: true});
     });
   } else{}
 });
 
 router.post('/api/sellCard/', function(req, res) {
-
-  myCss =  {
-    style: fs.readFileSync("./css/sellCardViewStyle.css", "utf8")
-  }
 
   var userIDQuery = "SELECT user_id FROM annonces WHERE card_id = " + mysql.escape(req.session.selectedCardDBId)
   var result = []
@@ -190,7 +157,6 @@ router.post('/api/sellCard/', function(req, res) {
                             imageUrl: req.session.selectedCardImageUrl,
                             mode: "SELL",
                             cardFound: true,
-                            myCss: myCss,
                             usersInfo: result});
     } else{
       idsToFind  = idsToFind.substring(0,  idsToFind.length - 3)
@@ -210,7 +176,6 @@ router.post('/api/sellCard/', function(req, res) {
                                     imageUrl: req.session.selectedCardImageUrl,
                                     mode: "SELL",
                                     cardFound: true,
-                                    myCss: myCss,
                                     usersInfo: result});
       });
     }
@@ -218,11 +183,6 @@ router.post('/api/sellCard/', function(req, res) {
 });
 
 router.post('/api/buyCard/', function(req, res) {
-
-  myCss =  {
-    style: fs.readFileSync("./css/sellCardViewStyle.css", "utf8")
-  }
-
   var userIDQuery = "SELECT user_id FROM card_user WHERE card_id = " + mysql.escape(req.session.selectedCardDBId)
   var result = []
   connect.query(userIDQuery, function(err, resultUser) {
@@ -239,7 +199,6 @@ router.post('/api/buyCard/', function(req, res) {
                                     imageUrl: req.session.selectedCardImageUrl,
                                     mode: "BUY",
                                     cardFound: true,
-                                    myCss: myCss,
                                     usersInfo: result});
     }else{
       idsToFind  = idsToFind.substring(0,  idsToFind.length - 3)
@@ -260,7 +219,6 @@ router.post('/api/buyCard/', function(req, res) {
                                     imageUrl: req.session.selectedCardImageUrl,
                                     mode: "BUY",
                                     cardFound: true,
-                                    myCss: myCss,
                                     usersInfo: result});
       });
     }
@@ -269,26 +227,18 @@ router.post('/api/buyCard/', function(req, res) {
 
 router.post('/api/addCardToShop', function(req, res) {
   insertCardUser(req.session.selectedCardDBId, req.session.userId);
-  myCss =  {
-    style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
-  }
   res.render('findcardView', {page:'Find a Card', 
                               menuId:'findCard',
                               imageUrl: req.session.selectedCardImageUrl,
-                              cardFound: true,
-                              myCss: myCss});
+                              cardFound: true});
 });
 
 router.post('/api/addCardToAnnonce', function(req, res) {
   insertCardAnnonce(req.session.selectedCardDBId, req.session.userId);
-  myCss =  {
-    style: fs.readFileSync("./css/findCardViewStyle.css", "utf8")
-  }
   res.render('findcardView', {page:'Find a Card', 
                               menuId:'findCard',
                               imageUrl: req.session.selectedCardImageUrl,
-                              cardFound: true,
-                              myCss: myCss});
+                              cardFound: true});
 });
 
 
